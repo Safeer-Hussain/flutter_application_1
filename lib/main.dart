@@ -1,9 +1,6 @@
 // ignore_for_file: dead_code
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MainApp());
@@ -21,26 +18,6 @@ class _MainAppState extends State<MainApp> {
   var secondValue = TextEditingController();
   var finalValue = TextEditingController();
 
-  dynamic calculation(
-      {required dynamic value1,
-      required dynamic value2,
-      required String operator}) {
-    switch (operator) {
-      case "+":
-        return (int.parse(value1.text) + int.parse(value2.text)).toString();
-        break;
-      case "-":
-        return (int.parse(value1.text) - int.parse(value2.text)).toString();
-        break;
-      case "*":
-        return (int.parse(value1.text) * int.parse(value2.text)).toString();
-        break;
-      case "/":
-        return (int.parse(value1.text) / int.parse(value2.text)).toString();
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,7 +25,7 @@ class _MainAppState extends State<MainApp> {
         appBar: AppBar(title: const Text("Calculator")),
         body: Container(
           padding: const EdgeInsets.all(15.0),
-          color: Colors.blue.shade100,
+          color: Colors.amber.shade100,
           child: Column(children: [
             TextField(
               controller: firstValue,
@@ -62,47 +39,43 @@ class _MainAppState extends State<MainApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      finalValue.text = calculation(
-                          value1: firstValue,
-                          value2: secondValue,
-                          operator: "+");
-                      setState(() {});
-                    },
-                    child: const Text("ADD")),
-                ElevatedButton(
-                    onPressed: () {
-                      finalValue.text = calculation(
-                          value1: firstValue,
-                          value2: secondValue,
-                          operator: "-");
-                      setState(() {});
-                    },
-                    child: const Text("SUB")),
-                ElevatedButton(
-                    onPressed: () {
-                      finalValue.text = calculation(
-                          value1: firstValue,
-                          value2: secondValue,
-                          operator: "/");
-                      setState(() {});
-                    },
-                    child: const Text("DIV")),
-                ElevatedButton(
-                    onPressed: () {
-                      finalValue.text = calculation(
-                          value1: firstValue,
-                          value2: secondValue,
-                          operator: "*");
-                      setState(() {});
-                    },
-                    child: const Text("MUL")),
+                button(value1: firstValue, value2: secondValue, operator: "+"),
+                button(value1: firstValue, value2: secondValue, operator: "-"),
+                button(value1: firstValue, value2: secondValue, operator: "*"),
+                button(value1: firstValue, value2: secondValue, operator: "/"),
               ],
             )
           ]),
         ),
       ),
     );
+  }
+
+  ElevatedButton button(
+      {required dynamic value1,
+      required dynamic value2,
+      required String operator}) {
+    return ElevatedButton(
+        onPressed: () {
+          switch (operator) {
+            case "+":
+              finalValue.text =
+                  (int.parse(value1.text) + int.parse(value2.text)).toString();
+              break;
+            case "-":
+              finalValue.text =
+                  (int.parse(value1.text) - int.parse(value2.text)).toString();
+              break;
+            case "*":
+              finalValue.text =
+                  (int.parse(value1.text) * int.parse(value2.text)).toString();
+              break;
+            case "/":
+              finalValue.text =
+                  (int.parse(value1.text) / int.parse(value2.text)).toString();
+              break;
+          }
+        },
+        child: Text(operator));
   }
 }
