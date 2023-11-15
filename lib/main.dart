@@ -7,27 +7,14 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  List<dynamic>? data;
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  fetchData() async {
-    var url = "http://jsonplaceholder.typicode.com/photos";
+  Future<List> fetchData() async {
+    var url = "https://mocki.io/v1/79c4fbfe-5de6-4628-8b88-a585f5608c59";
     var uri = Uri.parse(url);
     var res = await http.get(uri);
-    data = jsonDecode(res.body);
-    setState(() {});
+    return jsonDecode(res.body);
   }
 
   @override
@@ -35,7 +22,38 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text("HTTP")),
-        body: data != null
+        body: FutureBuilder(
+          future: fetchData(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? ListView.builder(
+                    itemBuilder: (context, i) => Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9.0),
+                          color: Colors.amber,
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black, blurRadius: 5.0),
+                          ]),
+
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.all(9.0),
+                      // color: Colors.amber,
+                      child: Text("${snapshot.data?[i]["id"]}"),
+                    ),
+                    itemCount: snapshot.data?.length,
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/*
+data != null
             ? ListView.builder(
                 itemBuilder: (context, i) => Container(
                   decoration: BoxDecoration(
@@ -52,8 +70,4 @@ class _MainAppState extends State<MainApp> {
                 ),
                 itemCount: data?.length,
               )
-            : const Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
+*/
