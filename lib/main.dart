@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'pages/home_page.dart';
+import 'pages/intro_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomePage(),
+      home: const IntroPage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blueGrey),
     );
